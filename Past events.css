@@ -1,0 +1,28 @@
+/* General page setup */
+body {
+/* ... existing code ... */
+    .edit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(184, 242, 138, 0.4);
+    }
+}
+
+/* --- ADDED: Responsive fixes for mobile --- */
+@media (max-width: 768px) {
+  .glass-card {
+    flex-direction: column; /* Stack image and text vertically */
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+  .glass-card .card-image {
+    width: 100%; /* Make image full-width */
+    height: auto;
+    aspect-ratio: 16 / 9; /* Set a mobile-friendly aspect ratio */
+  }
+  .card-content h1 {
+    font-size: 1.8rem;
+  }
+  .card-content p {
+    font-size: 0.9rem;
+  }
+}

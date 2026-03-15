@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List a New Event</title>
+    <link rel="stylesheet" href="List a new event.css">
+    <link rel="stylesheet" href="navbar.css">
+  
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <form class="event-form">
+    <h2>LIST A NEW EVENT</h2>
+    <div class="event-group">
+      <label for="event-name">Event Name</label>
+      <input type="text" id="event-name" name="event-name" placeholder="Enter event name" required>
+    </div>
+    <div class="event-group">
+      <label for="event-datetime">Event Date &amp; Time</label>
+      <input type="datetime-local" id="event-datetime" name="event-datetime" required>
+    </div>
+    <div class="event-group">
+      <label for="event-location">Location / Online Link</label>
+      <input type="text" id="event-location" name="event-location" placeholder="Venue or online link" required>
+    </div>
+    <div class="event-group">
+      <label for="organizer-name">Organizer Name</label>
+      <input type="text" id="organizer-name" name="organizer-name" placeholder="Organizer name" required>
+    </div>
+    <div class="event-group">
+      <label for="organizer-contact">Organizer Contact</label>
+      <input type="text" id="organizer-contact" name="organizer-contact" placeholder="Contact info" required>
+    </div>
+    <div class="event-group">
+      <label for="description">Short Description</label>
+      <!-- UPDATED: Removed the complex div and reverted to a simple textarea -->
+      <textarea id="description" name="description" placeholder="Brief event description" required></textarea>
+    </div>
+    <div class="event-group">
+      <label for="poster">Event Poster</label>
+      <input type="file" id="poster" name="poster" accept="image/*">
+    </div>
+    <div class="button-box">
+      <button type="submit">Submit Event</button>
+    </div>
+  </form>
+
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+  <script src="appwrite-config.js"></script>
+  <script src="navbar.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await account.get();
+      } catch (error) {
+        // Use a non-blocking way to inform user, or just let the form fail server-side
+        console.warn("User not logged in. Redirecting...");
+        window.location.href = 'Login.html';
+        return;
+      }
+
+      const eventForm = document.querySelector('.event-form');
+      // UPDATED: Removed variables for AI button
+      const descriptionTextarea = document.getElementById('description');
+
+      // --- REMOVED: AI Description Generation Logic ---
+      
+      // --- Existing form submission logic ---
+      eventForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitButton = eventForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting...';
+
+        try {
+          const user = await account.get();
+          const userId = user.$id;
+          
+           const posterFile = document.getElementById('poster').files[0];
+          let posterFileId = null;
+
+          if (posterFile) {
+            const fileResponse = await storage.createFile(
+              EVENTS_POSTERS_BUCKET_ID,
+              Appwrite.ID.unique(),
+              posterFile
+            );
+            posterFileId = fileResponse.$id;
+          }
+
+          const eventData = {
+            name: document.getElementById('event-name').value,
+            datetime: document.getElementById('event-datetime').value,
+            location: document.getElementById('event-location').value,
+            organizerName: document.getElementById('organizer-name').value,
+            organizerContact: document.getElementById('organizer-contact').value,
+            description: descriptionTextarea.value, // Use the value from the textarea
+            posterFileId: posterFileId,
+            userId: userId
+          };
+          
+          await databases.createDocument(
+            DATABASE_ID,
+            EVENTS_COLLECTION_ID,
+            Appwrite.ID.unique(),
+            eventData,
+            [
+              // Ensure public READ permission so everyone can see the event
+              Appwrite.Permission.read(Appwrite.Role.any()),
+              Appwrite.Permission.update(Appwrite.Role.user(userId)),
+              Appwrite.Permission.delete(Appwrite.Role.user(userId))
+            ]
+          );
+
+          // Use a non-blocking confirmation
+          console.log('Event listed successfully!');
+          window.location.href = 'Upcoming.html';
+
+        } catch (error) {
+          console.error('Failed to list event:', error);
+          // Use a non-blocking error message
+          console.error('Submission failed. Please check the browser console for error details.');
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = 'Submit Event';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

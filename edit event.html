@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event</title>
+    <!-- Using the same CSS as the "List a new event" page for consistency -->
+    <link rel="stylesheet" href="List a new event.css">
+    <link rel="stylesheet" href="navbar.css">
+    <style>
+        /* Add a specific style for the delete button */
+        .delete-btn {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            margin-left: 1rem;
+        }
+        .delete-btn:hover {
+            background: #cc0000;
+        }
+    </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <form class="event-form">
+    <h2>EDIT YOUR EVENT</h2>
+    <div class="event-group">
+      <label for="event-name">Event Name</label>
+      <input type="text" id="event-name" name="event-name" required>
+    </div>
+    <div class="event-group">
+      <label for="event-datetime">Event Date &amp; Time</label>
+      <input type="datetime-local" id="event-datetime" name="event-datetime" required>
+    </div>
+    <div class="event-group">
+      <label for="event-location">Location / Online Link</label>
+      <input type="text" id="event-location" name="event-location" required>
+    </div>
+    <div class="event-group">
+      <label for="organizer-name">Organizer Name</label>
+      <input type="text" id="organizer-name" name="organizer-name" required>
+    </div>
+    <div class="event-group">
+      <label for="organizer-contact">Organizer Contact</label>
+      <input type="text" id="organizer-contact" name="organizer-contact" required>
+    </div>
+    <div class="event-group">
+      <label for="description">Short Description</label>
+      <textarea id="description" name="description" required></textarea>
+    </div>
+    <div class="button-box">
+      <button type="submit">Update Event</button>
+      <button type="button" id="delete-event-btn" class="delete-btn">Delete Event</button>
+    </div>
+  </form>
+
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+  <script src="appwrite-config.js"></script>
+  <script src="navbar.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const eventForm = document.querySelector('.event-form');
+      const deleteBtn = document.getElementById('delete-event-btn');
+
+      // Get event ID from the URL query parameter
+      const params = new URLSearchParams(window.location.search);
+      const eventId = params.get('id');
+
+      if (!eventId) {
+        alert('No event ID provided.');
+        // UPDATED: Changed 'Web.html' to 'Index.html'
+        window.location.href = 'Index.html';
+        return;
+      }
+
+      try {
+        // Fetch the specific event data using the ID
+        const event = await databases.getDocument(DATABASE_ID, EVENTS_COLLECTION_ID, eventId);
+
+        // Populate the form fields with the fetched data
+        document.getElementById('event-name').value = event.name;
+        
+        // Correctly format the date for the datetime-local input
+        const date = new Date(event.datetime);
+        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+        document.getElementById('event-datetime').value = date.toISOString().slice(0, 16);
+        
+        document.getElementById('event-location').value = event.location;
+        document.getElementById('organizer-name').value = event.organizerName;
+        document.getElementById('organizer-contact').value = event.organizerContact;
+        document.getElementById('description').value = event.description;
+        
+      } catch (error) {
+        console.error('Failed to fetch event data:', error);
+        alert('Could not load event data. You may not have permission to edit this.');
+        // UPDATED: Changed 'Web.html' to 'Index.html'
+        window.location.href = 'Index.html';
+      }
+
+      // Handle form submission to UPDATE the event
+      eventForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const updatedData = {
+          name: document.getElementById('event-name').value,
+          datetime: document.getElementById('event-datetime').value,
+          location: document.getElementById('event-location').value,
+          organizerName: document.getElementById('organizer-name').value,
+          organizerContact: document.getElementById('organizer-contact').value,
+          description: document.getElementById('description').value,
+        };
+
+        try {
+          await databases.updateDocument(DATABASE_ID, EVENTS_COLLECTION_ID, eventId, updatedData);
+          alert('Event updated successfully!');
+          window.location.href = 'Upcoming.html';
+        } catch (error) {
+          console.error('Failed to update event:', error);
+          alert('Failed to update event.');
+        }
+      });
+
+      // Handle DELETE button click
+      deleteBtn.addEventListener('click', async () => {
+        if (confirm('Are you sure you want to delete this event? This cannot be undone.')) {
+            try {
+                await databases.deleteDocument(DATABASE_ID, EVENTS_COLLECTION_ID, eventId);
+                alert('Event deleted successfully.');
+                // UPDATED: Changed 'Web.html' to 'Index.html'
+                window.location.href = 'Index.html';
+            } catch (error) {
+                console.error('Failed to delete event:', error);
+                alert('Failed to delete event.');
+            }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

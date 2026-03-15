@@ -1,0 +1,165 @@
+/* General page setup */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+}
+
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1; /* Changed from 0 to -1 */
+    opacity: 0.7;
+}
+
+/* Glassy event form, horizontal layout */
+.event-form {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 48px 40px 36px 40px;
+    border-radius: 28px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.13);
+    text-align: left;
+    /* This is the glass effect for the form */
+    background: rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(0, 0, 0, 0.18);
+}
+
+.event-form h2 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 32px;
+    color: #fff;
+    text-align: center;
+    width: 100%;
+}
+
+.event-group {
+    margin-bottom: 22px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start; /* Aligns items to the start */
+    position: relative;
+    width: 100%;
+}
+
+.event-group label {
+    display: inline-block;
+    width: 220px;
+    flex-shrink: 0; /* Prevents label from shrinking */
+    text-align: left; /* Aligned left for clarity */
+    font-size: 1.1rem; /* Slightly smaller for mobile */
+    font-weight: 900;
+    color: #fff;
+    margin-right: 18px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.event-group input,
+.event-group textarea {
+    display: inline-block;
+    width: 100%; /* Make inputs fill remaining space */
+    max-width: 320px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    border: 1.5px solid rgba(255, 255, 255, 0.22);
+    /* This is the glass effect for the inputs */
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff; /* White text for input */
+    font-size: 1.08rem;
+    outline: none;
+    box-shadow: 0 2px 12px 0 rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: border-color 0.2s, background 0.2s;
+    text-align: left;
+}
+
+.event-group input:focus,
+.event-group textarea:focus {
+    border-color: #7b2ff2;
+    background: rgba(255, 255, 255, 0.28);
+}
+
+/* Fix for placeholder text color */
+.event-group input::placeholder,
+.event-group textarea::placeholder {
+    color: #eeeeee;
+    opacity: 0.7;
+}
+
+/* Button styles */
+.button-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.event-form .button-box button {
+    min-width: 180px;
+    padding: 16px 24px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(90deg, #7b2ff2 0%, #f357a8 100%);
+    color: #ffffff;
+    font-size: 1.18rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 18px 0 rgba(123, 47, 242, 0.3);
+    outline: none;
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.22s;
+}
+
+.event-form .button-box button:hover {
+    box-shadow: 0 6px 24px 0 rgba(243, 87, 168, 0.5);
+    border-color: #f357a8;
+    transform: scale(1.05);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .event-form {
+        width: 90%;
+        max-width: none;
+        padding: 32px 24px;
+    }
+
+    .event-group {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .event-group label {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 8px;
+        margin-right: 0;
+        font-size: 1rem;
+    }
+
+    .event-group input,
+    .event-group textarea {
+        width: 100%;
+        max-width: none;
+    }
+}
+

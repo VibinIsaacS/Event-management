@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+      /* Added style for the forgot password link */
+      .forgot-password {
+        color: #fff;
+        text-decoration: underline;
+        font-size: 0.9rem;
+        margin-top: 15px;
+        display: inline-block;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+      }
+      .forgot-password:hover {
+        opacity: 1;
+      }
+
+      /* --- REMOVED: Responsive fixes are now in login.css --- */
+      
+    </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <video class="video-bg" autoplay muted loop>
+    <source src="./eventblurred.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <form class="login-form" id="loginForm">
+    <h2>Login</h2>
+    <!-- Changed to a non-blocking message element -->
+    <p id="error-message" style="color: red; text-align: center; min-height: 1.2em;"></p>
+    <div class="input-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+    </div>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+    </div>
+    <button type="submit">Login</button>
+    <div style="width: 100%; text-align: center; margin-top: 18px;">
+      <p style="color: #fff;">Don't have an account? <a href="./signup.html" style="color: #7b2ff2; font-weight: bold; text-decoration: underline; font-size: 1.08rem;">Sign Up</a></p>
+      <!-- ADDED: Link to the new forgot-password.html page -->
+      <a href="forgot-password.html" class="forgot-password">Forgot Password?</a>
+    </div>
+  </form>
+
+  <!-- Appwrite Web SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+  <script src="appwrite-config.js"></script>
+  <script src="navbar.js"></script>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const errorMessage = document.getElementById('error-message');
+      errorMessage.textContent = ''; // Clear previous errors
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        await account.createEmailSession(email, password);
+        console.log('Login successful. Redirecting...');
+        window.location.href = 'Index.html';
+      } catch (error) {
+        console.error('Failed to login:', error);
+        errorMessage.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>
+

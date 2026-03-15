@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planit Events</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="navbar.css">
+</head>
+<body>
+ 
+  <div id="header-placeholder"></div>
+  
+  <main class="hero-section">
+    <div class="hero">
+      <h1>WHERE EVERY <br> EVENT FINDS <br> ITS <span>SPOTLIGHT.</span></h1>
+      <p>
+        Our platform is built to celebrate every occasion. From weddings and parties 
+        to college fests and corporate gatherings, we showcase past events that inspire 
+        new ones. Whether you’re here to share your story or discover what’s happening 
+        around, this is the space where events come alive.
+      </p>
+      <a href="List a new event.html"><button>LIST A NEW EVENT</button></a>
+    </div>
+
+    <div class="carousel-container">
+      <button class="carousel-arrow" id="prev">&#10094;</button>
+      <div class="event-carousel">
+        <div class="carousel-track">
+          <!-- Event cards will be inserted here by JavaScript -->
+        </div>
+      </div>
+      <button class="carousel-arrow" id="next">&#10095;</button>
+    </div>
+  </main>
+  
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+  <script src="appwrite-config.js"></script>
+  <script src="navbar.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const track = document.querySelector('.carousel-track');
+      if (!track) return;
+
+      try {
+        const response = await databases.listDocuments(DATABASE_ID, EVENTS_COLLECTION_ID);
+        const allEvents = response.documents;
+        const now = new Date();
+
+        // Separate events into past and upcoming
+        const pastEvents = allEvents.filter(event => new Date(event.datetime) < now);
+        const upcomingEvents = allEvents.filter(event => new Date(event.datetime) >= now);
+
+        // Sort both lists
+        pastEvents.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+        upcomingEvents.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+
+        // Combine lists, prioritizing upcoming events, and limit to 7
+        const displayEvents = [...upcomingEvents, ...pastEvents].slice(0, 7);
+
+        if (displayEvents.length === 0) {
+          track.innerHTML = '<p>No events to display.</p>';
+          return;
+        }
+
+        track.innerHTML = ''; // Clear for dynamic content
+
+        displayEvents.forEach(event => {
+          const card = document.createElement('div');
+          card.className = 'card';
+
+          const imageUrl = event.posterFileId
+            ? storage.getFileView(EVENTS_POSTERS_BUCKET_ID, event.posterFileId)
+            : 'https://placehold.co/400x250/1a1a1a/ffffff?text=No+Image';
+          
+          // --- KEY CHANGE: Determine the correct link ---
+          const isPastEvent = new Date(event.datetime) < now;
+          const readMoreLink = isPastEvent ? 'Past Events.html' : 'Upcoming.html';
+
+          // Truncate description for the card
+          const description = event.description || 'No description provided.';
+          const truncatedDescription = description.length > 80 
+            ? description.substring(0, 80) + '...' 
+            : description;
+
+          card.innerHTML = `
+            <img src="${imageUrl}" alt="Event Poster for ${event.name || 'Event'}">
+            <h3>${event.name || 'Untitled Event'}</h3>
+            <p>${truncatedDescription}</p>
+            <a href="${readMoreLink}"><button>Read More</button></a>
+          `;
+          track.appendChild(card);
+        });
+
+        // --- Carousel Logic ---
+        const cards = Array.from(track.children);
+        if (cards.length <= 3) return; // No need for carousel if not enough cards
+
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        let cardWidth = cards[0].getBoundingClientRect().width;
+        let currentIndex = 0;
+        const gap = 20;
+
+        function updateCarousel() {
+            const maxIndex = cards.length - 3; // Number of "pages"
+            if (currentIndex > maxIndex) currentIndex = maxIndex;
+            if (currentIndex < 0) currentIndex = 0;
+            track.style.transform = `translateX(-${currentIndex * (cardWidth + gap)}px)`;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < cards.length - 3) {
+                currentIndex++;
+                updateCarousel();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCarousel();
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            cardWidth = cards[0].getBoundingClientRect().width;
+            updateCarousel();
+        });
+
+      } catch (error) {
+        console.error('Failed to load events for carousel:', error);
+        track.innerHTML = '<p style="color: red;">Could not load events.</p>';
+      }
+    });
+  </script>
+</body>
+</html>
+

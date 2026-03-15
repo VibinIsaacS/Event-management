@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Past Events</title>
+  <link rel="stylesheet" href="Past events.css">
+  <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+  <video class="video-bg" autoplay muted loop>
+    <source src="./eventblurred.mp4" type="video/mp4">
+  </video>
+  <div id="header-placeholder"></div>
+  <main>
+    <div id="past-events-container">
+      <!-- Past event cards will be inserted here -->
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+  <script src="appwrite-config.js"></script>
+  <script src="navbar.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const eventsContainer = document.getElementById('past-events-container');
+      let currentUserId = null;
+      try {
+        currentUserId = (await account.get()).$id;
+      } catch (e) { /* not logged in */ }
+
+      try {
+        const response = await databases.listDocuments(DATABASE_ID, EVENTS_COLLECTION_ID);
+        const allEvents = response.documents;
+        const now = new Date();
+        const pastEvents = allEvents
+          .filter(event => new Date(event.datetime) < now)
+          .sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+
+        if (pastEvents.length === 0) {
+            eventsContainer.innerHTML = '<p class="no-events-message">No past events.</p>';
+            return;
+        }
+        
+        eventsContainer.innerHTML = '';
+
+        pastEvents.forEach(event => {
+          const eventCard = document.createElement('div');
+          eventCard.className = 'glass-card';
+          
+          const imageUrl = event.posterFileId
+            ? storage.getFileView(EVENTS_POSTERS_BUCKET_ID, event.posterFileId)
+            : 'https://placehold.co/400x260/1a1a1a/ffffff?text=No+Image';
+            
+          let eventDate = 'Date not specified';
+          if (event.datetime) {
+              const dateObj = new Date(event.datetime);
+              if (!isNaN(dateObj.getTime())) {
+                  eventDate = dateObj.toLocaleString('en-US', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short'
+                  });
+              }
+          }
+
+          let editButtonHTML = '';
+          if (currentUserId && currentUserId === event.userId) {
+            editButtonHTML = `<a href="Edit Event.html?id=${event.$id}" class="edit-btn">Edit</a>`;
+          }
+
+           eventCard.innerHTML = `
+            <img src="${imageUrl}" alt="Event Poster" class="card-image">
+            <div class="card-content">
+              <h1>${event.name || 'Untitled Event'}</h1>
+              <!-- These lines were missing -->
+              <p><strong>When:</strong> ${eventDate}</p>
+              <p><strong>Where:</strong> ${event.location || 'N/A'}</p>
+              <p class="organizer"><strong>Organizer:</strong> ${event.organizerName || 'N/A'} (${event.organizerContact || 'N/A'})</p>
+              <p>${event.description || 'No description provided.'}</p>
+              ${editButtonHTML}
+            </div>
+           `;
+          eventsContainer.appendChild(eventCard);
+        });
+      } catch (error) {
+        console.error('Failed to fetch past events:', error);
+        eventsContainer.innerHTML = '<p class="error-message">Could not load past events.</p>';
+      }
+    });
+  </script>
+</body>
+</html>
+

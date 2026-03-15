@@ -1,0 +1,147 @@
+/* General page setup */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; 
+    min-height: 100vh;
+    padding: 120px 20px 40px;
+    box-sizing: border-box;
+}
+
+#past-events-container, #upcoming-events-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 0.7;
+}
+
+.glass-card {
+  display: flex;
+  align-items: flex-start; 
+  gap: 2.5rem;
+  padding: 2.5rem;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(30, 30, 30, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.glass-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 16px 48px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-card .card-image {
+  width: 350px !important; 
+  height: auto;
+  aspect-ratio: 16 / 10;
+  border-radius: 15px;
+  object-fit: cover;
+  flex-shrink: 0; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.card-content {
+  color: #ffffff;
+  min-width: 0; 
+}
+
+.card-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 1rem 0;
+}
+
+.card-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.card-content p strong {
+    color: #f357a8;
+}
+
+.card-content .organizer {
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.edit-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #b8f28a;
+    color: #121212;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(184, 242, 138, 0.4);
+}
+
+.no-events-message, .error-message {
+    color: white;
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 2rem;
+}
+
+.error-message {
+    color: #ff5555;
+}
+
+
+/* --- ADDED: Responsive fixes for mobile --- */
+@media (max-width: 768px) {
+  main {
+    padding-top: 180px; /* Add more padding to account for stacked nav */
+  }
+  .glass-card {
+    flex-direction: column; /* Stack image and text vertically */
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+  .glass-card .card-image {
+    width: 100% !important; /* Make image full-width */
+    height: auto;
+    aspect-ratio: 16 / 9; /* Set a mobile-friendly aspect ratio */
+  }
+  .card-content h1 {
+    font-size: 1.8rem;
+  }
+  .card-content p {
+    font-size: 0.9rem;
+  }
+}
+

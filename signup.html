@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="signup.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <video class="video-bg" autoplay muted loop>
+    <source src="./eventblurred.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <form class="signup-form" id="signupForm">
+    <h2>Sign Up</h2>
+    <p id="error-message" style="color: red; text-align: center;"></p>
+    <div class="input-group">
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+    </div>
+    <div class="input-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+    </div>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password (min 8 characters)" required>
+    </div>
+    <div class="input-group">
+      <label for="confirm-password">Confirm Password</label>
+      <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter your password" required>
+    </div>
+    <button type="submit" class="signup-btn">Sign Up</button>
+    <div style="width: 100%; text-align: center; margin-top: 18px;">
+      <p style="color: #fff;">Already have an account? <a href="./Login.html" style="color: #7b2ff2; font-weight: bold; text-decoration: underline; font-size: 1.08rem;">Login</a></p>
+    </div>
+  </form>
+
+  <!-- Appwrite Web SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+  <script src="appwrite-config.js"></script>
+  <script src="navbar.js"></script>
+  
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = ''; // Clear previous errors
+
+        const name = document.getElementById('fullname').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        if (password !== confirmPassword) {
+            errorMessage.textContent = 'Passwords do not match!';
+            return;
+        }
+
+        try {
+            // Use ID.unique() to generate a unique user ID
+            const user = await account.create(ID.unique(), email, password, name);
+            console.log('User created successfully:', user);
+            
+            // Automatically log the user in after successful registration
+            // FIX: The method is createEmailSession, not createEmailPasswordSession
+            await account.createEmailSession(email, password);
+            console.log('Session created. Redirecting...');
+            
+            // Redirect to the home page or dashboard after successful signup and login
+            // UPDATED: Changed 'Web.html' to 'Index.html'
+            window.location.href = 'Index.html'; 
+
+        } catch (error) {
+            console.error('Failed to create user:', error);
+            errorMessage.textContent = error.message;
+        }
+    });
+  </script>
+
+</body>
+</html>

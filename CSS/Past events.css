@@ -1,0 +1,46 @@
+/* General page setup styling */
+body {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.edit-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #b8f28a;
+    color: #121212;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(184, 242, 138, 0.4);
+}
+
+/* --- Responsive fixes for mobile devices --- */
+@media (max-width: 768px) {
+  .glass-card {
+    flex-direction: column; 
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+  .glass-card .card-image {
+    width: 100% !important; 
+    height: auto;
+    aspect-ratio: 16 / 9; 
+  }
+  .card-content h1 {
+    font-size: 1.8rem;
+  }
+  .card-content p {
+    font-size: 0.9rem;
+  }
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Past Events</title>
+  <!-- Fixed relative paths to style sheets inside the CSS folder -->
+  <link rel="stylesheet" href="../CSS/Past events.css">
+  <link rel="stylesheet" href="../CSS/navbar.css">
+  <link rel="stylesheet" href="../CSS/shared.css">
+</head>
+<body>
+  
+  <video class="video-bg" autoplay muted loop playsinline>
+    <source src="../Assets/eventblurred.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div id="header-placeholder"></div>
+
+  <main>
+    <div id="past-events-container">
+      <p style="color: white; text-align: center;">Loading past events...</p>
+    </div>
+  </main>
+
+  <!-- Appwrite Web SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+  
+  <!-- Fixed relative paths pointing to the Javascript folder -->
+  <script src="../Javascript/appwrite-config.js"></script>
+  <script src="../Javascript/navbar.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const eventsContainer = document.getElementById('past-events-container');
+      if (!eventsContainer) return;
+
+      let currentUserId = null;
+
+      try {
+        const user = await account.get();
+        currentUserId = user.$id;
+      } catch (error) {
+        // User not logged in is fine for viewing past events
+      }
+
+      try {
+        const response = await databases.listDocuments(DATABASE_ID, EVENTS_COLLECTION_ID);
+        const allEvents = response.documents;
+        const now = new Date();
+
+        // Filter events whose date and time are in the past
+        const pastEvents = allEvents
+          .filter(event => new Date(event.datetime) < now)
+          .sort((a, b) => new Date(b.datetime) - new Date(a.datetime)); // Newest past events first
+
+        if (pastEvents.length === 0) {
+          eventsContainer.innerHTML = '<p class="no-events-message">No past events to display.</p>';
+          return;
+        }
+
+        eventsContainer.innerHTML = ''; // Clear loader message
+
+        pastEvents.forEach(event => {
+          const eventCard = document.createElement('div');
+          eventCard.className = 'glass-card';
+
+          const imageUrl = event.posterFileId
+            ? storage.getFileView(EVENTS_POSTERS_BUCKET_ID, event.posterFileId)
+            : 'https://placehold.co/400x260/1a1a1a/ffffff?text=No+Image';
+            
+          let eventDate = 'Date not specified';
+          if (event.datetime) {
+              const dateObj = new Date(event.datetime);
+              if (!isNaN(dateObj.getTime())) {
+                  eventDate = dateObj.toLocaleString('en-US', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short'
+                  });
+              }
+          }
+
+          let editButtonHTML = '';
+          if (currentUserId && currentUserId === event.userId) {
+            editButtonHTML = `<a href="edit event.html?id=${event.$id}" class="edit-btn">Edit Event</a>`;
+          }
+
+          eventCard.innerHTML = `
+            <img src="${imageUrl}" alt="Event Poster" class="card-image">
+            <div class="card-content">
+              <h1>${event.name || 'Untitled Event'}</h1>
+              <p><strong>When:</strong> ${eventDate}</p>
+              <p><strong>Where:</strong> ${event.location || 'N/A'}</p>
+              <p class="organizer"><strong>Organizer:</strong> ${event.organizerName || 'N/A'} (${event.organizerContact || 'N/A'})</p>
+              <p>${event.description || 'No description provided.'}</p>
+              ${editButtonHTML}
+            </div>
+          `;
+          eventsContainer.appendChild(eventCard);
+        });
+
+      } catch (error) {
+        console.error('Failed to fetch past events:', error);
+        eventsContainer.innerHTML = '<p class="error-message">Could not load past events logs. Check database credentials.</p>';
+      }
+    });
+  </script>
+</body>
+</html>

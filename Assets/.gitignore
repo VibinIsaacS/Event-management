@@ -1,0 +1,10 @@
+# Ignore VS Code workspace files
+*.code-workspace
+.vscode/
+
+# Ignore large video files (GitHub blocks files over 100MB)
+*.mp4
+
+# Ignore hidden system files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,174 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  /* This prevents a default background from showing */
+  background-color: #121212;
+}
+
+.video-bg {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+nav {
+  width: 100%;
+  position: fixed; /* Changed to fixed to stay on top */
+  top: 0;
+  left: 0;
+  padding: 20px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above all other content */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.logo:hover {
+  transform: translateY(-2px) scale(1.04);
+}
+
+.logo img {
+  margin-right: 1px;
+  width: 100px;
+  height: auto;
+  object-fit: contain;
+}
+
+.logo span {
+  font-weight: 1000;
+  font-size: 20px;
+  line-height: 1.1;
+  transition: color 0.3s;
+  color: #ffffff;
+}
+.logo span:hover {
+  color: #b8f28a;
+}
+
+/* Continuous glass bar for navbar items */
+.nav-bar-glass {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50px; /* Pill shape */
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 8px 16px;
+  gap: 40px;
+}
+
+.nav-bar-glass ul {
+  display: flex;
+  list-style: none;
+  gap: 40px;
+}
+
+.nav-bar-glass ul li a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  display: inline-block;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-bar-glass ul li a:hover {
+  color: #b8f28a;
+  transform: translateY(-2px);
+}
+
+/* Container for search and buttons */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* The styles for the search input have been removed */
+
+/* --- BUTTON STYLES --- */
+.list-event-btn, .login-btn {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Style for the primary action button */
+.list-event-btn {
+  background-color: #b8f28a;
+  color: #121212;
+}
+
+.list-event-btn:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 4px 10px rgba(184, 242, 138, 0.4);
+}
+
+/* Style for the secondary action button */
+.login-btn {
+  border: 1px solid #fff;
+}
+
+.login-btn:hover {
+  background-color: #fff;
+  color: #121212;
+}
+
+/* --- ADDED: Responsive fixes for mobile --- */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column; /* Stack logo and nav-bar */
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+  }
+  .logo span {
+    text-align: center;
+  }
+  .nav-bar-glass {
+    flex-direction: column; /* Stack nav links and actions */
+    gap: 15px;
+    padding: 20px;
+    width: 90%; /* Make it take up most of the width */
+  }
+  .nav-bar-glass ul {
+    flex-direction: column; /* Stack the menu items */
+    gap: 15px;
+    text-align: center;
+  }
+  .nav-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .list-event-btn, .login-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+

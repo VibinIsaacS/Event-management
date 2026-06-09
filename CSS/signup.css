@@ -1,0 +1,135 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    color: #fff;
+    background-color: transparent;
+}
+
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 0;
+    opacity: 0.7;
+}
+
+.signup-form {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 420px;
+    /* This margin-top was removed, JS will handle it */
+    margin: 0 auto; 
+    padding: 48px 40px 36px 40px;
+    border-radius: 28px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.13);
+    background: rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(0, 0, 0, 0.18);
+}
+
+.signup-form h2 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 32px;
+    color: #fff;
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 22px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.input-group label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    border: 1.5px solid rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: 0 2px 12px 0 #fff2;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: border-color 0.2s, background 0.2s;
+}
+
+/* Make placeholder text white for visibility */
+.signup-form input::placeholder {
+    color: #fff;
+    opacity: 0.5;
+}
+
+.input-group input:focus {
+    border-color: #7b2ff2;
+    background: rgba(255,255,255,0.28);
+    color: #222;
+}
+
+.signup-form button {
+    width: 100%;
+    min-width: 180px;
+    padding: 14px 0;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(90deg, #7b2ff2 0%, #f357a8 100%);
+    color: #fff;
+    font-size: 1.13rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 12px 0 #7b2ff288;
+    outline: none;
+    text-align: center;
+    border: 1.5px solid rgba(255,255,255,0.22);
+    transition: background 0.22s, box-shadow 0.22s, transform 0.18s;
+    margin-top: 18px;
+}
+
+.signup-form button:hover {
+    background: linear-gradient(90deg, #f357a8 0%, #7b2ff2 100%);
+    box-shadow: 0 4px 18px 0 #f357a888;
+    transform: scale(1.06);
+}
+
+/* --- MOBILE FIX --- */
+/* The margin-top was removed from here. JS will handle all top spacing. */
+@media (max-width: 480px) {
+    .signup-form {
+        width: 90%;
+        padding-left: 24px;
+        padding-right: 24px;
+        /* margin-top: 80px; <--- REMOVED */
+    }
+
+    .signup-form h2 {
+        font-size: 1.8rem;
+    }
+}
+

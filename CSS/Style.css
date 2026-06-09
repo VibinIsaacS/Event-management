@@ -1,0 +1,235 @@
+/* General Body Styles */
+body {
+    background-color: #121212; /* Dark background for the theme */
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Video Background */
+.video-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Hero Section Layout */
+.hero-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-height: 100vh;
+    /* This padding-top was removed, JS will handle it */
+    padding: 0 4rem; 
+    gap: 2rem;
+    box-sizing: border-box; /* Ensures padding is included in height calculation */
+}
+
+/* Left Side - Hero Text */
+.hero {
+    max-width: 45%;
+    /* Add padding-top here to respect the body padding */
+    padding-top: 150px; 
+}
+
+.hero h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.hero h1 span {
+    color: #b8f28a; /* Highlight color */
+}
+
+.hero p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 600px;
+}
+
+.hero button {
+    background-color: #b8f28a;
+    color: #121212;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hero button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(184, 242, 138, 0.3);
+}
+
+/* Right Side - Carousel Container */
+.carousel-container {
+    width: 55%;
+    position: relative; /* This is the positioning context for the arrows */
+    display: flex;
+    align-items: center;
+    /* Add padding-top here to respect the body padding */
+    padding-top: 150px; 
+    align-self: flex-start; /* Aligns to the top */
+    height: 100vh; /* Tries to take full height */
+    box-sizing: border-box;
+}
+
+.event-carousel {
+    width: 100%;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.5s ease-in-out;
+}
+
+/* Card Styling */
+.card {
+    flex: 0 0 320px; 
+    background: #1e1e1e;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    color: #cccccc;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.card button {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #b8f28a;
+    color: #b8f28a;
+    padding: 0.75rem 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.card button:hover {
+    background-color: #b8f28a;
+    color: #121212;
+}
+
+/* Carousel Arrows */
+.carousel-arrow {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    line-height: 1;
+    border-radius: 50%;
+    z-index: 10;
+    transition: background-color 0.3s;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-arrow:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+#prev {
+    left: -25px; /* Position outside the container */
+}
+
+#next {
+    right: -25px; /* Position outside the container */
+}
+
+
+/* --- MOBILE FIX --- */
+/* The padding-top was removed from here. JS will handle all top spacing. */
+@media (max-width: 900px) {
+    .hero-section {
+        flex-direction: column;
+        align-items: center;
+        /* padding-top: 100px; <--- REMOVED */
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        height: auto; /* Allow height to be auto */
+        min-height: 100vh;
+    }
+
+    .hero {
+        max-width: 100%;
+        text-align: center;
+        padding-top: 20px; /* Reduced padding for mobile */
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+        max-width: 100%;
+    }
+
+    .carousel-container {
+        width: 100%;
+        padding-top: 30px; /* Reduced padding for mobile */
+        padding-bottom: 50px;
+        height: auto; /* Allow height to be auto */
+        align-self: center; /* Center it */
+    }
+
+    .event-carousel {
+        width: 90%; /* Show a bit of the next/prev cards */
+        margin: 0 auto;
+    }
+
+    .card {
+        flex: 0 0 280px; /* Slightly smaller cards on mobile */
+    }
+
+    .carousel-arrow {
+        font-size: 1.5rem;
+    }
+    #prev {
+        left: -10px;
+    }
+    #next {
+        right: -10px;
+    }
+}
+

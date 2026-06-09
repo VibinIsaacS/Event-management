@@ -8,7 +8,7 @@ main {
     justify-content: center;
     align-items: flex-start; 
     min-height: 100vh;
-    padding: 120px 20px 40px;
+    padding: 50px 20px 40px; /* Adjusted to 50px for even gap */
     box-sizing: border-box;
 }
 
@@ -125,7 +125,7 @@ main {
 /* --- ADDED: Responsive fixes for mobile --- */
 @media (max-width: 768px) {
   main {
-    padding-top: 180px; /* Add more padding to account for stacked nav */
+    padding-top: 40px; /* Adjusted padding for stacked nav */
   }
   .glass-card {
     flex-direction: column; /* Stack image and text vertically */
@@ -144,4 +144,3 @@ main {
     font-size: 0.9rem;
   }
 }
-

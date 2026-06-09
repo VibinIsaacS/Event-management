@@ -31,8 +31,7 @@ body {
     justify-content: center;
     width: 100%;
     max-width: 420px;
-    /* This margin-top was removed, JS will handle it */
-    margin: 0 auto; 
+    margin: 50px auto; /* Adjusted to 50px for even gap */
     padding: 48px 40px 36px 40px;
     border-radius: 28px;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.13);
@@ -119,17 +118,15 @@ body {
 }
 
 /* --- MOBILE FIX --- */
-/* The margin-top was removed from here. JS will handle all top spacing. */
 @media (max-width: 480px) {
     .signup-form {
         width: 90%;
         padding-left: 24px;
         padding-right: 24px;
-        /* margin-top: 80px; <--- REMOVED */
+        margin-top: 30px; /* Reduced gap for mobile */
     }
 
     .signup-form h2 {
         font-size: 1.8rem;
     }
 }
-
